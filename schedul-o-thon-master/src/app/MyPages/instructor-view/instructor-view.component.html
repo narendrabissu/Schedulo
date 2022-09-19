@@ -1,0 +1,114 @@
+<!-- <div style="text-align:right; padding-right: 10px;">My profile  Hi {{instructorname}}</div>
+<button type="button" (click)="schedules()" class="btn btn-primary float-right">Create Schedule</button> -->
+<nav class="navbar navbar-light bg-primary">
+    <div class="container-fluid">
+        <h1 style="color: aliceblue;">Section Name: {{section_name}} </h1>
+        <div class="d-flex">
+            <button class="btn btn-success" (click) = onADD() data-bs-toggle="modal" data-bs-target="#AddSchedule">Add Schedule</button>
+        </div>
+    </div>
+</nav>
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th scope="col">Schedule ID</th>
+            <th scope="col">Schedule Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let row of lstSchedules">
+            <td>{{row.schedule_id}}</td>
+            <td>{{row.schedule_name}}</td>
+            <td>{{row.description}}</td>            
+            <td>
+                <button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#EditSchedule" (click)="getscheduleById(row)">Edit</button>
+                <button (click)="delete(row)" class="btn btn-danger mx-3"> Delete</button>
+                <button class="btn btn-success" (click)="viewEventDetail(row)">View Details</button>
+            </td>
+            
+        </tr>
+    </tbody>
+</table>
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="AddSchedule" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Schedule Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="form" #scheduleForm="ngForm" (ngSubmit)="Details(scheduleForm)">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Schedule Name*</label>
+                  <input type="text" [(ngModel)]="scheduleData.schedule_name" class="form-control" name="Schdule_Name" required #scheduleName="ngModel" [class.is-invalid]="scheduleName.invalid &&scheduleName.touched">
+                  <small class="text-danger" [class.d-none]="scheduleName.valid||scheduleName.untouched">Schedule Name is required</small>
+                  
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Description*</label>
+                  <textarea [(ngModel)]="scheduleData.description" class="form-control" name="Description" required #description="ngModel" [class.is-invalid]="description.invalid && description.touched"></textarea>
+                  <small class="text-danger" [class.d-none]="description.valid||description.untouched">Description is required</small>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Batch ID</label>
+                    <input type="text" [(ngModel)]="scheduleData.batch_id" readonly="readonly" class="form-control" name="batch_id" id="batch_id" #batch="ngModel">
+                   
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Sub Batch ID</label>
+                    <input type="text" [(ngModel)]="scheduleData.sub_batch_id" class="form-control" name="sub_batch_id" id="sub_batch_id" readonly="readonly" #subBatch="ngModel"  >
+                                        
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Section ID</label>
+                    <input type="text" [(ngModel)]="scheduleData.section_id" class="form-control" name="section_id" id="section_id" readonly="readonly" #section="ngModel"  >
+                                      
+                  </div>
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button [disabled]="scheduleForm.invalid" type="button" class="btn btn-success" (click)="Details(scheduleForm)">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="EditSchedule" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Schedule Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="form"  #scheduleEditForm="ngForm" (ngSubmit)="updateSchedules(scheduleEditForm)">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Schedule Name</label>
+                  <input type="text" class="form-control" [(ngModel)]="schedule_data.schedule_name" name="schedule_name" required #scheduleName="ngModel" [class.is-invalid]="scheduleName.invalid &&scheduleName.touched">
+                  <small class="text-danger" [class.d-none]="scheduleName.valid||scheduleName.untouched">Schedule Name is required</small>
+            
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Description</label>
+                  <input type="text" class="form-control" [(ngModel)]="schedule_data.description" name="description" #description="ngModel" [class.is-invalid]="description.invalid && description.touched">
+                  <small class="text-danger" [class.d-none]="description.valid||description.untouched">Description is required</small>
+                </div>
+               
+                    
+                  
+                  <div class="modal-footer">
+                    <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" [disabled]="scheduleEditForm.invalid" (click)="updateSchedules(scheduleEditForm)" class="btn btn-success" >Update</button>
+                  </div>
+              </form>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </div>

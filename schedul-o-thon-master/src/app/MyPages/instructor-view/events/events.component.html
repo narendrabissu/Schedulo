@@ -1,0 +1,162 @@
+<!-- <div style="text-align:right; padding-right: 10px;">My profile  Hi {{instructorname}}</div>
+<button type="button" (click)="schedules()" class="btn btn-primary float-right">Create Schedule</button> -->
+<nav class="navbar navbar-light bg-primary">
+    <div class="container-fluid">
+        <h1 style="color: aliceblue;">Schedule Name: {{schedule_name}} </h1>
+        <div class="d-flex">
+            <button class="btn btn-success" (click) = onADD() data-bs-toggle="modal" data-bs-target="#AddEvents">Add Event</button>
+        </div>
+    </div>
+</nav>
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th scope="col">Event ID</th>
+            <th scope="col">Event title</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Instructor</th>
+            <th scope="col">Additinal Info</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let row of event_data">
+            <td>{{row.event_id}}</td>
+            <td>{{row.event_title}}</td>
+            <td>{{row.start_date}}</td>
+            <td>{{row.end_date}}</td>
+            <td>{{row.instructor}}</td>
+            <td>{{row.additional_info}}</td>
+            
+            <td>
+                <button class="btn  btn-info" data-bs-toggle="modal" data-bs-target="#EditEvent" (click)="getEventById(row)">Edit</button>
+                <button  class="btn btn-danger mx-3" (click)=" delete(row)"> Delete</button>
+               
+            </td>
+            
+        </tr>
+    </tbody>
+</table>
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="AddEvents" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Events Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="form" #eventForm="ngForm" (ngSubmit)="addEvents(eventForm)" >
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Event Title*</label>
+                  <input type="text" [(ngModel)]="eventData.event_title" class="form-control" name="event_title" required #event_title="ngModel" [class.is-invalid]="event_title.invalid &&event_title.touched">
+                  <small class="text-danger" [class.d-none]="event_title.valid||event_title.untouched">event title is required</small>
+                  
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Start Date*</label>
+                  <input type="date" [(ngModel)]="eventData.start_date" class="form-control" name="start_date" placeholder="dd-mm-yyyy" value=""
+                  min="1997-01-01" max="2030-12-31" required #start_date="ngModel" [class.is-invalid]="start_date.invalid && start_date.touched">
+                  <small class="text-danger" [class.d-none]="start_date.valid||start_date.untouched">start Date is required</small>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">End Date*</label>
+                    <input type="date" [(ngModel)]="eventData.end_date" placeholder="dd-mm-yyyy" value=""
+                    min="1997-01-01" max="2030-12-31" class="form-control" name="end_date" required #end_date="ngModel" [class.is-invalid]="end_date.invalid && end_date.touched" >
+                    <small class="text-danger" [class.d-none]="end_date.valid||end_date.untouched">end_date is required</small>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Instructor*</label>
+                    <input type="text" [(ngModel)]="eventData.instructor" class="form-control" name="instructor" required #instructor="ngModel" [class.is-invalid]="instructor.invalid && instructor.touched" >
+                    <small class="text-danger" [class.d-none]="instructor.valid||instructor.untouched">Instructor is required</small>
+                    
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Additional Info</label>
+                    <input type="text" [(ngModel)]="eventData.additional_info" class="form-control" name="additional_info" required #additional_info="ngModel" [class.is-invalid]="additional_info.invalid && additional_info.touched" >
+                    <small class="text-danger" [class.d-none]="additional_info.valid||additional_info.untouched">additional Info is required</small>
+                    
+                  </div>
+                  <div class="mb-3">
+                    <label for="abc" class="form-label">Schedule ID</label>
+                    <input type="text" readonly="readonly" [(ngModel)]="eventData.schedule_id"  class="form-control" id="schedule_id" name="schedule_id" #schedule_id="ngModel">
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label" >Event Type</label> <br>
+                    <input type="radio" name="Physical" (click)= "ChangeData(true)" checked >Physical  &nbsp;
+                    <input type="radio"  name="Virtual" (click)= "ChangeData(false)" >Virtual
+                    <!-- <small *ngIf="event_type.invalid">Event type is required</small> -->  
+                    <div *ngIf="isPhysical">
+                      <label for="exampleInputEmail1" class="form-label">Classroom</label>
+                      <input type="text" [(ngModel)]="eventData.classroom" class="form-control" name="classroom" required #classroom="ngModel" [class.is-invalid]="classroom.invalid && classroom.touched" >
+                    <small class="text-danger" [class.d-none]="classroom.valid||classroom.untouched">classroom   is required</small>
+                   </div>  
+                    
+                   <div *ngIf="!isPhysical">
+                    <label for="exampleInputEmail1" class="form-label">Event Link</label>
+                    <input type="text" [(ngModel)]="eventData.event_link" class="form-control" name="event_link" required #event_link="ngModel" [class.is-invalid]="event_link.invalid && event_link.touched" >
+                  <small class="text-danger" [class.d-none]="event_link.valid||event_link.untouched">Event Link is required</small>
+                   </div>
+                  </div>
+
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button [disabled]="eventForm.invalid" (click)="addEvents(eventForm)" type="button" class="btn btn-success" >Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="EditEvent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Event Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="form"  #eventEditForm="ngForm" (ngSubmit)="updateEvents(eventEditForm)">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Event Title</label>
+                  <input type="text" class="form-control" [(ngModel)]="data.event_title" name="event_title" required #event_title="ngModel" [class.is-invalid]="event_title.invalid &&event_title.touched">
+                  <small class="text-danger" [class.d-none]="event_title.valid||event_title.untouched">Event Title is required</small>
+            
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Start Date</label>
+                  <input type="date" class="form-control" [(ngModel)]="data.start_date" name="start_date" #start_date="ngModel" [class.is-invalid]="start_date.invalid && start_date.touched">
+                  <small class="text-danger" [class.d-none]="start_date.valid||start_date.untouched">start_date is required</small>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">End Date</label>
+                    <input type="date" class="form-control" [(ngModel)]="data.end_date" name="end_date" #end_date="ngModel" [class.is-invalid]="end_date.invalid && end_date.touched" >
+                    <small class="text-danger" [class.d-none]="end_date.valid||end_date.untouched">end_date is required</small>
+                    
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Instructor</label>
+                    <input type="text" class="form-control" [(ngModel)]="data.instructor" name="instructor" required #instructor="ngModel" [class.is-invalid]="instructor.invalid && instructor.touched" >
+                    <small class="text-danger" [class.d-none]="instructor.valid||instructor.untouched">Sub-Batch is required</small>
+                    
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Additional Info</label>
+                    <input type="text" class="form-control"[(ngModel)]="data.additional_info" name="additional_info"  required #additional_info="ngModel" [class.is-invalid]="additional_info.invalid && additional_info.touched" >
+                    <small class="text-danger" [class.d-none]="additional_info.valid||additional_info.untouched">Additional Info is required</small>
+                    
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" [disabled]="eventEditForm.invalid" (click)="updateEvents(eventEditForm)"  class="btn btn-success" >Update</button>
+                  </div>
+              </form>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,166 @@
+<nav class="navbar navbara-light bg-primary">
+  <div class="container-fluid">
+    <h1>Admin Dashboard</h1>
+    <div class="d-flex">
+      <button type="button" data-bs-toggle="modal" class="btn btn-success" data-bs-target="#exampleModal">Add Batch</button>
+    </div>
+
+  </div>
+</nav>
+
+
+<table class="table mt-3">
+  <thead>
+    
+    <tr>
+      <th scope="col">Batch Name</th>
+      <th scope="col">Location</th>
+      <th scope="col">Batch Size</th>
+      <th scope="col">Start Date</th>
+      <th scope="col">Batch Type</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let batch of batchInfo; let i = index">
+      <td>{{batch.batchname}}</td>
+    
+      <td>{{ batch.location }}</td>
+      <td>{{ batch.batchsize}}</td>
+      <td>{{ batch.startdate}}</td>
+      <td>{{ batch.batchtype }}</td>
+      <td>
+        <button  (click) = "onEdit(batch)" class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#example1Modal">Edit</button>
+        <button  (click) = "delete_Batch(batch)" class="btn btn-danger">Delete</button>
+        <button class="btn btn-primary"  (click)="ViewbatchDetail(batch)"> View Details </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Batch Details</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      
+        <form class="form" #batchForm = "ngForm" (ngSubmit) = "addBatch(batchForm)">
+          
+          <div class="form-group">
+            <label for="uname1">Batch Name</label>
+            <input [(ngModel)]="batchDetails.batchname" name="batchName" type="text" required  #batchName = "ngModel"  [class.is-invalid] = "batchName.invalid && batchName.touched" class="form-control rounded-0"
+              required>
+              <small class = "text-danger" [class.d-none] = "batchName.valid || batchName.untouched ">Batch name is required</small>
+
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input [(ngModel)]="batchDetails.location" name="location" type="text" required #location= "ngModel"  [class.is-invalid] = "location.invalid && location.touched" class="form-control rounded-0"
+              required>
+              <small class = "text-danger" [class.d-none] = "location.valid || location.untouched ">location  is required</small>
+          </div>
+          <div class="form-group">
+            <label>Batch Size</label>
+            <input [(ngModel)]="batchDetails.batchsize" name="batchSize" type="number" required #batchsize = "ngModel"  [class.is-invalid] = "batchsize.invalid && batchsize.touched" class="form-control rounded-0"
+              required>
+              <small class = "text-danger" [class.d-none] = "batchsize.valid || batchsize.untouched ">batch Size is required</small>
+
+          </div>
+          <div class="form-group">
+            <label>Start Date</label>
+            <input [(ngModel)]="batchDetails.startdate" name="startDate" type="date" required #startdate = "ngModel"  [class.is-invalid] = "startdate.invalid && startdate.touched" class="form-control rounded-0"
+              required>
+              <small class = "text-danger" [class.d-none] = "startdate.valid || startdate.untouched "> start date is required</small>
+          </div>
+          <div class="form-group">
+            <label>Batch Type</label>
+            <input [(ngModel)]="batchDetails.batchtype" name="batchType" type="text" required #batchtype = "ngModel"  [class.is-invalid] = "batchtype.invalid && batchtype.touched" class="form-control rounded-0"
+              required>
+              <small class = "text-danger" [class.d-none] = "batchtype.valid || batchtype.untouched "> Batch Type  is required</small>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+        <button [disabled] = "batchForm.form.invalid" type="button" (click)="addBatch(batchForm)" class="btn btn-success float-right "
+          >ADD</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- edit model -->
+<div class="modal fade" id="example1Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Batch Details</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      
+        <form class="form" #edit_batchForm = "ngForm" (ngSubmit) = "addBatch(batchForm)">
+          
+          <div class="form-group">
+            <label for="uname1">Batch Name</label>
+            <input [(ngModel)]="batch_Details.batchname" name="batchname" type="text" required  #batchname = "ngModel"  [class.is-invalid] = "batchName.invalid && batchName.touched" class="form-control rounded-0"
+              required>
+              <small class = "text-danger" [class.d-none] = "batchname.valid || batchname.untouched ">Batch name is required</small>
+
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input [(ngModel)]="batch_Details.location" name="location" type="text" required #location= "ngModel"  [class.is-invalid] = "location.invalid && location.touched" class="form-control rounded-0"
+              required>
+              <small class = "text-danger" [class.d-none] = "location.valid || location.untouched ">location  is required</small>
+          </div>
+          <div class="form-group">
+            <label>Batch Size</label>
+            <input [(ngModel)]="batch_Details.batchsize" name="batchsize" type="number" required #batchsize = "ngModel"  [class.is-invalid] = "batchsize.invalid && batchsize.touched" class="form-control rounded-0"
+              required>
+              <small class = "text-danger" [class.d-none] = "batchsize.valid || batchsize.untouched ">batch Size is required</small>
+
+          </div>
+          <div class="form-group">
+            <label>Start Date</label>
+            <input [(ngModel)]="batch_Details.startdate" name="startdate" type="date" required #startdate = "ngModel"  [class.is-invalid] = "startdate.invalid && startdate.touched" class="form-control rounded-0"
+              required>
+              <small class = "text-danger" [class.d-none] = "startdate.valid || startdate.untouched "> start date is required</small>
+          </div>
+          <div class="form-group">
+            <label>Batch Type</label>
+            <input [(ngModel)]="batch_Details.batchtype" name="batchtype" type="text" required #batchtype = "ngModel"  [class.is-invalid] = "batchtype.invalid && batchtype.touched" class="form-control rounded-0"
+              required>
+              <small class = "text-danger" [class.d-none] = "batchtype.valid || batchtype.untouched "> Batch Type  is required</small>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+        <button [disabled] = "edit_batchForm.form.invalid" type="button" (click)="editBatch()" class="btn btn-success float-right "
+          >UPDATE</button>
+      </div>
+    </div>
+  </div>
+</div>

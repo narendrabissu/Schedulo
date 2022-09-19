@@ -1,0 +1,361 @@
+<nav class="navbar navbara-light bg-primary">
+
+  <div class="container-fluid">
+    <h1>Batch Name {{batch_name}}</h1>
+    <div class="d-flex">
+        
+      <button  type="button"   class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Section</button>
+    </div>
+
+  </div>
+</nav>
+
+<div class="container" *ngIf="sectionInfo.length; else nosections">
+  <table class="table mt-3">
+    <thead>
+      <tr>
+        <th scope="col">Section Name</th>
+        <th scope="col">Strength</th>
+        <th scope="col">Classroom Name</th>
+        <th scope="col">Section Owner </th>
+       
+        <th scope="col">DL Name</th>
+        <th scope="col">Track name</th>
+        
+        
+
+
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let section of sectionInfo; let i = index">
+          <td>{{section.section_name}}</td>
+          <td>{{section.strength}}</td>
+          <td>{{section.classroom}}</td>
+          <td>{{section.owner}}</td>
+          
+          <td>{{section.dl_name}}</td>
+          <td>{{section.track}}</td>
+          
+        
+        
+          
+          <td>
+            <button style="margin: 3px;" (click) = editInfo(section) class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#example1Modal">Edit</button>
+            <button  style="margin: 3px;"  class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#example3Modal">View Trainee list</button>
+            <button  style="margin: 3px;"  class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#example2Modal">ADD Trainee</button>
+            <button style="margin: 3px;" (click) = deleteSection(section) class="btn btn-danger" >Delete</button>
+            <button style="margin: 3px;"  class="btn btn-primary" (click)="viewSectionDetail(section)"> View Schedules </button>
+
+            
+         
+          </td>
+        </tr>
+      </tbody>
+  
+  </table>
+
+  </div>
+
+  <ng-template #nosections>
+    <h1>No sections,Please add one.</h1>
+  </ng-template>
+
+
+
+
+<!-- add Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Sub-Batch Details</h5>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form  class="form" #section_form = "ngForm" >
+      <div class="form-group">
+          <label for="uname1">Section Name</label>
+          <input [(ngModel)]="sectionDetails.section_name" name="section_name" type="text"  required  #section_name = "ngModel"  [class.is-invalid] = "sub_batch_name.invalid && sub_batch_name.touched"  class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "section_name.valid || section_name.untouched ">name is required</small>
+        </div>
+      
+        <div class="form-group">
+          <label for="uname1">Classroom Name</label>
+          <input [(ngModel)]="sectionDetails.classroom" name="classroom" type="text"  required  #classroom = "ngModel"  [class.is-invalid] = "sub_batch_name.invalid && sub_batch_name.touched"  class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "classroom.valid || classroom.untouched ">name is required</small>
+        </div>
+
+        <div class="form-group">
+          <label for="uname1">Section DL Name</label>
+          <input [(ngModel)]="sectionDetails.dl_name" name="dl_name" type="email" required #dl_name= "ngModel"  [class.is-invalid] = "dl_name.invalid && dl_name.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "dl_name.valid || dl_name.untouched "> DL Name is required</small>
+        </div>
+
+        <div class="form-group">
+          <label for="uname1">Section owner </label>
+          <input [(ngModel)]="sectionDetails.owner" name="owner" type="text"  required  #owner = "ngModel"  [class.is-invalid] = "sub_batch_name.invalid && sub_batch_name.touched"  class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "owner.valid || owner.untouched ">name is required</small>
+        </div>
+
+        <div class="form-group">
+          <label for="uname1">Track Name </label>
+          <input [(ngModel)]="sectionDetails.track" name="owner" type="text"  required  #track = "ngModel"  [class.is-invalid] = "sub_batch_name.invalid && sub_batch_name.touched"  class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "track.valid || track.untouched ">name is required</small>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+  
+          <button  (click) = addSections(section_form) type="button"  class="btn btn-success float-right "
+            >ADD</button>
+        </div>
+     
+     
+     
+      
+
+     
+     
+      
+
+    </form>
+
+  </div>
+
+
+    
+  </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!-- trainee list view Modal -->
+<div class="modal fade" id="example3Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Sub-Batch Details</h5>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container" *ngIf="sectionInfo.length; else nosections">
+      <table class="table mt-3">
+        <thead>
+          <tr>
+            <th scope="col">section Name</th>
+            
+           
+            <th scope="col">DL Name</th>
+            <th scope="col">Track name</th>
+            
+            
+    
+    
+   
+          </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let section of sectionInfo; let i = index">
+              <td>{{section.section_name}}</td>
+              
+              
+              <td>{{section.dl_name}}</td>
+              <td>{{section.track}}</td>
+              
+
+              
+            
+            
+              
+             
+            </tr>
+          </tbody>
+      
+      </table>
+    
+      </div>
+  </div>
+
+
+    
+  </div>
+</div>
+</div>
+
+
+
+<!-- add trainee Modal -->
+<div class="modal fade" id="example2Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Trainee Details</h5>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form  class="form"  >
+      <div class="form-group">
+          <label for="uname1">Trainee Full  Name</label>
+          <input [(ngModel)]="sectionDetails.section_name" name="section_name" type="text"  required  #section_name = "ngModel"  [class.is-invalid] = "sub_batch_name.invalid && sub_batch_name.touched"  class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "section_name.valid || section_name.untouched ">name is required</small>
+        </div>
+      
+       
+
+        <div class="form-group">
+          <label for="uname1">Trainee email Name</label>
+          <input [(ngModel)]="sectionDetails.dl_name" name="dl_name" type="email" required #dl_name= "ngModel"  [class.is-invalid] = "dl_name.invalid && dl_name.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "dl_name.valid || dl_name.untouched "> DL Name is required</small>
+        </div>
+
+
+
+        <div class="modal-footer">
+          <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+  
+          <button  type="button"  class="btn btn-success float-right "
+            >ADD</button>
+        </div>
+     
+     
+     
+      
+
+     
+     
+      
+
+    </form>
+
+  </div>
+
+
+    
+  </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--edit  Modal -->
+<div class="modal fade" id="example1Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Section details</h5>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form  class="form" #sectionForm = ngForm >
+      <div class="form-group">
+          <label for="uname1">Section Name</label>
+          <input [(ngModel)]="sectionDetails.section_name" name="section_name" type="text"  required  #section_name = "ngModel"  [class.is-invalid] = "sub_batch_name.invalid && sub_batch_name.touched"  class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "section_name.valid || section_name.untouched ">name is required</small>
+        </div>
+      
+        <div class="form-group">
+          <label for="uname1">Classroom Name</label>
+          <input [(ngModel)]="sectionDetails.classroom" name="classroom" type="text"  required  #classroom = "ngModel"  [class.is-invalid] = "sub_batch_name.invalid && sub_batch_name.touched"  class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "classroom.valid || classroom.untouched ">name is required</small>
+        </div>
+
+        <div class="form-group">
+          <label for="uname1">Section DL Name</label>
+          <input [(ngModel)]="sectionDetails.dl_name" name="dl_name" type="email" required #dl_name= "ngModel"  [class.is-invalid] = "dl_name.invalid && dl_name.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "dl_name.valid || dl_name.untouched "> DL Name is required</small>
+        </div>
+
+        <div class="form-group">
+          <label for="uname1">Section owner </label>
+          <input [(ngModel)]="sectionDetails.owner" name="owner" type="text"  required  #owner = "ngModel"  [class.is-invalid] = "sub_batch_name.invalid && sub_batch_name.touched"  class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "owner.valid || owner.untouched ">name is required</small>
+        </div>
+
+        <div class="form-group">
+          <label for="uname1">Track Name </label>
+          <input [(ngModel)]="sectionDetails.track" name="owner" type="text"  required  #track = "ngModel"  [class.is-invalid] = "sub_batch_name.invalid && sub_batch_name.touched"  class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "track.valid || track.untouched ">name is required</small>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+  
+          <button (click) = editSections() type="button"  class="btn btn-success float-right "
+            >UPDATE</button>
+        </div>
+     
+     
+     
+      
+
+     
+     
+      
+
+    </form>
+
+  </div>
+
+
+    
+  </div>
+</div>
+</div>

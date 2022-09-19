@@ -1,0 +1,243 @@
+<nav class="navbar navbara-light bg-primary">
+
+  <div class="container-fluid">
+    <h1>Batch Name: {{batch_name}}</h1>
+    <div class="d-flex">
+        
+      <button   (click) = onADD() type="button"   class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Sub-batch</button>
+    </div>
+
+  </div>
+</nav>
+
+<div class="container" *ngIf="sub_batchInfo.length; else nosubBatches">
+<table class="table mt-3">
+  <thead>
+    <tr>
+      <th scope="col">Sub-Batch Name</th>
+      <th scope="col">Stream</th>
+      <th scope="col">Size</th>
+      <th scope="col">Location</th>
+     
+      <th scope="col">Start Date</th>
+      <th scope="col">End Date</th>
+      <th scope="col">Batch Admin</th>
+      <th scope="col">Feedback</th>
+      
+
+
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr *ngFor="let sub_batch of sub_batchInfo; let i = index">
+        <td>{{sub_batch.sub_batch_name}}</td>
+        <td>{{sub_batch.stream}}</td>
+        <td>{{sub_batch.size}}</td>
+        <td>{{sub_batch.location}}</td>
+        
+        <td>{{sub_batch.start_date}}</td>
+        <td>{{sub_batch.end_date}}</td>
+        <td>{{sub_batch.batch_admin}}</td>
+        <td>{{sub_batch.feedback}}</td>
+      
+      
+        
+        <td>
+          <button  (click) = "onEdit(sub_batch)" class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#example1Modal">Edit</button>
+          <button  (click) = "delete_subBatch(sub_batch)" class="btn btn-danger" >Delete</button>
+          <button class="btn btn-primary"  (click)="ViewSection(sub_batch)"> View Sections </button>
+          
+       
+        </td>
+      </tr>
+    </tbody>
+
+</table>
+
+</div>
+
+<ng-template #nosubBatches>
+  <h1>No subBatch ,please add one.</h1>
+</ng-template>
+
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Sub-Batch Details</h5>
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form  class="form" #sub_batchForm="ngForm" (ngSubmit) = "add_SubBatch(sub_batchForm)">
+        <div class="form-group">
+          <label for="uname1">Sub Batch Name</label>
+          <input [(ngModel)]="subBatchDetails.sub_batch_name" name="sub_batch_name" type="text"  required  #sub_batch_name = "ngModel"  [class.is-invalid] = "sub_batch_name.invalid && sub_batch_name.touched"  class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "sub_batch_name.valid || sub_batch_name.untouched ">name is required</small>
+        </div>
+        <div class="form-group">
+          <label for="uname1">Stream</label>
+          <input [(ngModel)]="subBatchDetails.stream" name="stream" type="text"   required  #stream = "ngModel"  [class.is-invalid] = "stream.invalid && stream.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "stream.valid || stream.untouched ">stream  is required</small>
+            
+        </div>
+        <div class="form-group">
+          <label for="uname1">Size</label>
+          <input [(ngModel)]="subBatchDetails.size" name="size" type="number" required  #size = "ngModel"  [class.is-invalid] = "size.invalid && size.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "size.valid || size.untouched ">size is required</small>
+        </div>
+        <div class="form-group">
+          <label for="uname1">Location</label>
+          <input [(ngModel)]="subBatchDetails.location" name="location" type="text" required #location= "ngModel"  [class.is-invalid] = "location.invalid && location.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "location.valid || location.untouched ">location is required</small>
+        </div>
+        <div class="form-group">
+          <label for="uname1">Batch Name</label>
+          <input [(ngModel)]="subBatchDetails.batch_name" name="batch_name"  type="text" class="form-control rounded-0" disabled
+            required>
+            
+        </div>
+        <div class="form-group">
+          <label for="uname1">Start Date</label>
+          <input [(ngModel)]="subBatchDetails.start_date" name="start_date" type="date" required #start_date= "ngModel"  [class.is-invalid] = "start_date.invalid && start_date.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "start_date.valid || start_date.untouched ">start date is required</small>
+        </div>
+        <div class="form-group">
+          <label for="uname1">End Date</label>
+          <input [(ngModel)]="subBatchDetails.end_date" name="end_date" type="date" required #end_date = "ngModel"  [class.is-invalid] = "end_date.invalid && end_date.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "end_date.valid || end_date.untouched ">end date is required</small>
+        </div>
+        <div class="form-group">
+          <label for="uname1">Batch Admin</label>
+          <input [(ngModel)]="subBatchDetails.batch_admin" name="batch_admin" type="text" required #batch_admin = "ngModel"  [class.is-invalid] = "batch_admin.invalid && batch_admin.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "batch_admin.valid || batch_admin.untouched "> admin is required</small>
+        </div>
+        <div class="form-group">
+          <label for="uname1">DL Name</label>
+          <input [(ngModel)]="subBatchDetails.dl_name" name="dl_name" type="email" required #dl_name= "ngModel"  [class.is-invalid] = "dl_name.invalid && dl_name.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "dl_name.valid || dl_name.untouched "> DL Name is required</small>
+        </div>
+        <div class="form-group">
+          <label for="uname1">Feedback</label>
+          <input [(ngModel)]="subBatchDetails.feedback" name="feedback" type="text" required #feedback = "ngModel"  [class.is-invalid] = "feedback.invalid && feedback.touched" class="form-control rounded-0"
+            required>
+          
+        </div>
+
+      </form>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+      <button [disabled] = "sub_batchForm.form.invalid" type="button" (click)="add_SubBatch(sub_batchForm)" class="btn btn-success float-right "
+        >ADD</button>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
+
+<!--edit form-->
+<div class="modal fade" id="example1Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Sub-Batch Details</h5>
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form    class="form" #editform="ngForm" (ngSubmit) = "edit_SubBatch()">
+        <div class="form-group">
+          <label for="uname1">Sub Batch Name</label>
+          <input [(ngModel)]="sub_batch_details.sub_batch_name" name="sub_batch_name" type="text"  required  #sub_batch_name = "ngModel"  [class.is-invalid] = "sub_batch_name.invalid && sub_batch_name.touched"  class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "sub_batch_name.valid || sub_batch_name.untouched ">name is required</small>
+        </div>
+        <div class="form-group">
+          <label for="uname1">Stream</label>
+          <input [(ngModel)]="sub_batch_details.stream" name="stream" type="text"   required  #stream = "ngModel"  [class.is-invalid] = "stream.invalid && stream.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "stream.valid || stream.untouched ">stream  is required</small>
+            
+        </div>
+        <div class="form-group">
+          <label for="uname1">Size</label>
+          <input [(ngModel)]="sub_batch_details.size" name="size" type="number" required  #size = "ngModel"  [class.is-invalid] = "size.invalid && size.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "size.valid || size.untouched ">size is required</small>
+        </div>
+        <div class="form-group">
+          <label for="uname1">Location</label>
+          <input [(ngModel)]="sub_batch_details.location" name="location" type="text" required #location= "ngModel"  [class.is-invalid] = "location.invalid && location.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "location.valid || location.untouched ">location is required</small>
+        </div>
+        
+        <div class="form-group">
+          <label for="uname1">Start Date</label>
+          <input [(ngModel)]="sub_batch_details.start_date" name="start_date" type="date" required #start_date= "ngModel"  [class.is-invalid] = "start_date.invalid && start_date.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "start_date.valid || start_date.untouched ">start date is required</small>
+        </div>
+        <div class="form-group">
+          <label for="uname1">End Date</label>
+          <input [(ngModel)]="sub_batch_details.end_date" name="end_date" type="date" required #end_date = "ngModel"  [class.is-invalid] = "end_date.invalid && end_date.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "end_date.valid || end_date.untouched ">end date is required</small>
+        </div>
+        <div class="form-group">
+          <label for="uname1">Batch Admin</label>
+          <input [(ngModel)]="sub_batch_details.batch_admin" name="batch_admin" type="text" required #batch_admin = "ngModel"  [class.is-invalid] = "batch_admin.invalid && batch_admin.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "batch_admin.valid || batch_admin.untouched "> admin is required</small>
+        </div>
+        <div class="form-group">
+          <label for="uname1">DL Name</label>
+          <input [(ngModel)]="sub_batch_details.dl_name" name="dl_name" type="email" required #dl_name= "ngModel"  [class.is-invalid] = "dl_name.invalid && dl_name.touched" class="form-control rounded-0"
+            required>
+            <small class = "text-danger" [class.d-none] = "dl_name.valid || dl_name.untouched "> DL Name is required</small>
+        </div>
+        <div class="form-group">
+          <label for="uname1">Feedback</label>
+          <input [(ngModel)]="sub_batch_details.feedback" name="feedback" type="text" required #feedback = "ngModel"  [class.is-invalid] = "feedback.invalid && feedback.touched" class="form-control rounded-0"
+            required>
+          
+        </div>
+
+      </form>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+      <button [disabled] = "editform.form.invalid" type="button" (click)="edit_SubBatch()" class="btn btn-success float-right "
+        >Update</button>
+    </div>
+  </div>
+</div>
+</div>
